@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
           chrome.bookmarks.create(
             {
               parentId: folderId,
-              title: numberOfSeconds + " - " + tabs[0].title,
+              title: secondsToHHmmss(numberOfSeconds) + " - " + tabs[0].title,
               url: currentUrl
             },
             () => {
@@ -36,6 +36,24 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+
+
+function secondsToHHmmss(seconds) {
+  var hours = Math.floor(seconds / 3600).toString();
+  seconds %= 3600;
+
+  var minutes = Math.floor(seconds / 60).toString();
+  if (minutes < 10) {
+    minutes = "0" + minutes;
+  }
+  seconds %= 60;
+
+  if (seconds < 10) {
+    seconds = "0" + seconds;
+  }
+  
+  return hours + ":" + minutes + ":" + seconds;
+}
 
 
 function displayBookmarks(nodes, parentNode) {
