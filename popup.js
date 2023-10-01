@@ -51,15 +51,20 @@ function secondsToHHmmss(seconds) {
   if (seconds < 10) {
     seconds = "0" + seconds;
   }
-  
+
   return hours + ":" + minutes + ":" + seconds;
 }
 
 
 function displayBookmarks(nodes, parentNode) {
   for (const node of nodes) {
-    const listItem = document.createElement('li');
-    listItem.textContent = node.title;
-    parentNode.appendChild(listItem);
+    const tableRow = document.createElement('tr');
+    const tableRowColumn1 = document.createElement('td');
+    const tableRowColumn2 = document.createElement('td');
+    tableRowColumn1.textContent = node.title.substring(0, node.title.indexOf(' '));;
+    tableRowColumn2.textContent = node.title.substring(node.title.indexOf(' ') + 3).slice(0, -10);
+    tableRow.appendChild(tableRowColumn1);
+    tableRow.appendChild(tableRowColumn2);
+    parentNode.appendChild(tableRow);
   }
 }
