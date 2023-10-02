@@ -37,6 +37,12 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+  currentUrl = tabs[0].url.substr(0, 32);
+  if (currentUrl != "https://www.youtube.com/watch?v=") {
+    document.getElementById("get-time").style.display = "none";
+  }
+});
 
 function secondsToHHmmss(seconds) {
   var hours = Math.floor(seconds / 3600).toString();
