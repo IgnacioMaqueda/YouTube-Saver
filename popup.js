@@ -13,11 +13,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   getTimeButton.addEventListener("click", function () {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      currentUrl = tabs[0].url.substr(0, 43);
       chrome.tabs.sendMessage(tabs[0].id, { action: "getVideoTime" }, function (response) {
         if (response && response.time) {
           numberOfSeconds = Math.floor(response.time);
-          currentUrl = currentUrl + "&t=" + numberOfSeconds + "s";
+          if (isYouTubeVideo(tabs[0].url)) {
+            currentUrl = tabs[0].url.substr(0, 43) + "&t=" + numberOfSeconds + "s";
+          } else if (isTwitchVideo(tabs[0].url)) {
+            currentUrl = tabs[0].url.substr(0, 39) + "?t=" + numberOfSeconds + "s";
+          }
           chrome.bookmarks.create(
             {
               parentId: folderId,
@@ -38,8 +41,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-  currentUrl = tabs[0].url.substr(0, 32);
-  if (currentUrl != "https://www.youtube.com/watch?v=") {
+  currentUrl = tabs[0].url;
+  if (!isYouTubeVideo(currentUrl) && !isTwitchVideo(currentUrl)) {
     document.getElementById("get-time").style.display = "none";
   }
 });
@@ -61,7 +64,6 @@ function secondsToHHmmss(seconds) {
   return hours + ":" + minutes + ":" + seconds;
 }
 
-
 function displayBookmarks(nodes, parentNode) {
   for (const node of nodes) {
     const tableRow = document.createElement('tr');
@@ -70,10 +72,18 @@ function displayBookmarks(nodes, parentNode) {
     const hyperlink = document.createElement('a');
     hyperlink.href = node.url;
     hyperlink.textContent = node.title.substring(0, node.title.indexOf(' '));;
-    tableRowColumn2.textContent = node.title.substring(node.title.indexOf(' ') + 3).slice(0, -10);
+    tableRowColumn2.textContent = node.title.substring(node.title.indexOf(' ') + 3).slice(0, -9).trim();
     tableRowColumn1.appendChild(hyperlink);
     tableRow.appendChild(tableRowColumn1);
     tableRow.appendChild(tableRowColumn2);
     parentNode.appendChild(tableRow);
   }
+}
+
+function isYouTubeVideo(url) {
+  return url.substr(0, 32) == "https://www.youtube.com/watch?v=";
+}
+
+function isTwitchVideo(url) {
+  return url.substr(0, 29) == "https://www.twitch.tv/videos/";
 }

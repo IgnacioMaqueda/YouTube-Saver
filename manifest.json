@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "YouTube Saver",
   "version": "1.0",
-  "description": "Saves YouTube video links at the current time of visualization",
+  "description": "Saves YouTube (or Twitch) video links at the current time of visualization",
   "icons": {
     "16": "images/icon-16.png",
     "32": "images/icon-32.png",
@@ -15,7 +15,8 @@
         "scripts/content.js"
       ],
       "matches": [
-        "https://www.youtube.com/*"
+        "https://www.youtube.com/*",
+        "https://www.twitch.tv/*"
       ]
     }
   ],
@@ -27,6 +28,7 @@
     "bookmarks"
   ],
   "host_permissions": [
-    "https://youtube.com/*"
+    "https://youtube.com/*",
+    "https://www.twitch.tv/*"
   ]
 }
