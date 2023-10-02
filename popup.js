@@ -61,8 +61,11 @@ function displayBookmarks(nodes, parentNode) {
     const tableRow = document.createElement('tr');
     const tableRowColumn1 = document.createElement('td');
     const tableRowColumn2 = document.createElement('td');
-    tableRowColumn1.textContent = node.title.substring(0, node.title.indexOf(' '));;
+    const hyperlink = document.createElement('a');
+    hyperlink.href = node.url;
+    hyperlink.textContent = node.title.substring(0, node.title.indexOf(' '));;
     tableRowColumn2.textContent = node.title.substring(node.title.indexOf(' ') + 3).slice(0, -10);
+    tableRowColumn1.appendChild(hyperlink);
     tableRow.appendChild(tableRowColumn1);
     tableRow.appendChild(tableRowColumn2);
     parentNode.appendChild(tableRow);
