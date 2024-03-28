@@ -60,7 +60,11 @@ function displayBookmarks(nodes, parentNode) {
       tableRowColumn2.textContent = node.title.substring(node.title.indexOf(' ') + 3).slice(0, -9).trim();
       const removeButton = document.createElement('button');
       removeButton.textContent = "Remove";
-      currentRemoveButtonId = "remove-time-" + i;
+      if (i < 10) {
+        currentRemoveButtonId = "remove-time-0" + i;
+      } else {
+        currentRemoveButtonId = "remove-time-" + i;
+      }
       removeButton.id = currentRemoveButtonId;
       tableRowColumn3.appendChild(removeButton);
       tableRowColumn1.appendChild(hyperlink);
@@ -84,7 +88,7 @@ function displayBookmarks(nodes, parentNode) {
       urlPrefixes[i] = anUrlPrefix;
       var removeBookmarkButton = document.getElementById(currentRemoveButtonId);
       removeBookmarkButton.addEventListener("click", function () {
-        currentIndex = Number(this.id.slice(-1));
+        currentIndex = Number(this.id.slice(-2));
         chrome.bookmarks.search({ query: urlPrefixes[currentIndex] }, (results) => {
           for (const result of results) {
             if (baseUrl(result.url) == urlPrefixes[currentIndex]) {
