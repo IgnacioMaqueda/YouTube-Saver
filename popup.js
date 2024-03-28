@@ -68,24 +68,13 @@ function displayBookmarks(nodes, parentNode) {
       removeButton.id = currentRemoveButtonId;
       tableRowColumn3.appendChild(removeButton);
       tableRowColumn1.appendChild(hyperlink);
-      anUrlPrefix = baseUrl(node.url);
-      if (urlPrefix == anUrlPrefix) {
-        document.getElementById("get-time").style.display = "none";
-        const updateButton = document.createElement('button');
-        updateButton.textContent = "Update";
-        updateButton.id = "update-time"
-        tableRowColumn1.appendChild(updateButton);
-        appendChilds(parentNode, tableRow, tableRowColumn1, tableRowColumn2, tableRowColumn3);
-        var updateTimeButton = document.getElementById("update-time");
-        updateTimeButton.addEventListener("click", function () {
-          chrome.bookmarks.search({ query: urlPrefix }, (tree) => {
-            updateBookmark(tabs, tree);
-          });
-        });
+      nodeUrlPrefix = baseUrl(node.url);
+      if (urlPrefix == nodeUrlPrefix) {
+        addRowWithUpdateButton(tabs, urlPrefix, parentNode, tableRow, tableRowColumn1, tableRowColumn2, tableRowColumn3);
       } else {
         appendChilds(parentNode, tableRow, tableRowColumn1, tableRowColumn2, tableRowColumn3);
       }
-      urlPrefixes[i] = anUrlPrefix;
+      urlPrefixes[i] = nodeUrlPrefix;
       var removeBookmarkButton = document.getElementById(currentRemoveButtonId);
       removeBookmarkButton.addEventListener("click", function () {
         currentIndex = Number(this.id.slice(-2));
@@ -100,6 +89,21 @@ function displayBookmarks(nodes, parentNode) {
       });
       i += 1;
     }
+  });
+}
+
+function addRowWithUpdateButton(tabs, prefix, parent, row, column1, column2, column3) {
+  document.getElementById("get-time").style.display = "none";
+  const updateButton = document.createElement('button');
+  updateButton.textContent = "Update";
+  updateButton.id = "update-time"
+  column1.appendChild(updateButton);
+  appendChilds(parent, row, column1, column2, column3);
+  var updateTimeButton = document.getElementById("update-time");
+  updateTimeButton.addEventListener("click", function () {
+    chrome.bookmarks.search({ query: prefix }, (tree) => {
+      updateBookmark(tabs, tree);
+    });
   });
 }
 
